@@ -1,7 +1,7 @@
 # DocScan-JSONify
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![GitHub Pages](https://github.com/justinjdaniel/docscan-jsonify/actions/workflows/deploy.yml/badge.svg)](https://justinjdaniel.github.io/docscan-jsonify/)
+[![GitHub license](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
+[![GitHub Pages](https://github.com/justinjdaniel/docscan-jsonify/actions/workflows/static.yml/badge.svg)](https://justinjdaniel.github.io/docscan-jsonify/)
 
 A free, browser-based tool to scan documents with your camera, extract text via OCR, and convert it to meaningful JSON using open-source JavaScript libraries. All processing is done client-side, ensuring your data remains private.
 
