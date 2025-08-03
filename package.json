@@ -1,0 +1,25 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "[![GitHub license](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE) [![GitHub Pages](https://github.com/justinjdaniel/docscan-jsonify/actions/workflows/static.yml/badge.svg)](https://justinjdaniel.github.io/docscan-jsonify/)",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cypress:open": "cypress open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Justinjdaniel/docscan-jsonify.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Justinjdaniel/docscan-jsonify/issues"
+  },
+  "homepage": "https://github.com/Justinjdaniel/docscan-jsonify#readme",
+  "devDependencies": {
+    "cypress": "^14.5.3"
+  }
+}
