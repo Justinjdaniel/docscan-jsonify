@@ -1,13 +1,19 @@
-import { Box, Container, Heading, VStack, useDisclosure } from '@chakra-ui/react';
-import React, { useState, useEffect } from 'react';
-import OCRControls from './components/OCRControls';
-import ResultsDisplay from './components/ResultsDisplay';
-import CameraModal from './components/CameraModal';
-import { useOCR } from './hooks/useOCR';
+import {
+  Box,
+  Container,
+  Heading,
+  VStack,
+  useDisclosure,
+} from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
+import OCRControls from "./components/OCRControls";
+import ResultsDisplay from "./components/ResultsDisplay";
+import CameraModal from "./components/CameraModal";
+import { useOCR } from "./hooks/useOCR";
 
 // Utility to convert base64 data URI to a File object
 function dataURIToFile(dataURI, filename) {
-  const arr = dataURI.split(',');
+  const arr = dataURI.split(",");
   const mime = arr[0].match(/:(.*?);/)[1];
   const bstr = atob(arr[1]);
   let n = bstr.length;
@@ -19,10 +25,15 @@ function dataURIToFile(dataURI, filename) {
 }
 
 function App() {
-  const [engine, setEngine] = useState('tesseract');
+  const [engine, setEngine] = useState("tesseract");
   const [selectedFile, setSelectedFile] = useState(null);
-  const { processImage, result, status, processing } = useOCR();
-  const { isOpen: isCameraOpen, onOpen: onCameraOpen, onClose: onCameraClose } = useDisclosure();
+  const { processImage, result, status, processing, setStatus, setProcessing } =
+    useOCR();
+  const {
+    isOpen: isCameraOpen,
+    onOpen: onCameraOpen,
+    onClose: onCameraClose,
+  } = useDisclosure();
 
   useEffect(() => {
     if (selectedFile) {
@@ -37,27 +48,27 @@ function App() {
   };
 
   const handleUseTestImage = async () => {
-    setStatus('Loading test image...');
+    setStatus("Loading test image...");
     setProcessing(true);
     try {
-      const response = await fetch('/printable-receipt-template-34.jpg');
+      const response = await fetch("/printable-receipt-template-34.jpg");
       if (!response.ok) {
-        throw new Error('Test image not found in /public folder');
+        throw new Error("Test image not found in /public folder");
       }
       const blob = await response.blob();
-      const file = new File([blob], 'printable-receipt-template-34.jpg', {
-        type: 'image/jpeg',
+      const file = new File([blob], "printable-receipt-template-34.jpg", {
+        type: "image/jpeg",
       });
       setSelectedFile(file);
     } catch (error) {
-      console.error('Error loading test image:', error);
+      console.error("Error loading test image:", error);
       setStatus(`Error: Could not load test image. ${error.message}`);
       setProcessing(false);
     }
   };
 
   const handleCapture = (imageSrc) => {
-    const file = dataURIToFile(imageSrc, 'capture.jpg');
+    const file = dataURIToFile(imageSrc, "capture.jpg");
     setSelectedFile(file);
   };
 
