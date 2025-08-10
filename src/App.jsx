@@ -36,6 +36,26 @@ function App() {
     }
   };
 
+  const handleUseTestImage = async () => {
+    setStatus('Loading test image...');
+    setProcessing(true);
+    try {
+      const response = await fetch('/printable-receipt-template-34.jpg');
+      if (!response.ok) {
+        throw new Error('Test image not found in /public folder');
+      }
+      const blob = await response.blob();
+      const file = new File([blob], 'printable-receipt-template-34.jpg', {
+        type: 'image/jpeg',
+      });
+      setSelectedFile(file);
+    } catch (error) {
+      console.error('Error loading test image:', error);
+      setStatus(`Error: Could not load test image. ${error.message}`);
+      setProcessing(false);
+    }
+  };
+
   const handleCapture = (imageSrc) => {
     const file = dataURIToFile(imageSrc, 'capture.jpg');
     setSelectedFile(file);
@@ -57,6 +77,7 @@ function App() {
               <OCRControls
                 onFileSelect={handleFileSelect}
                 onCameraSelect={onCameraOpen}
+                onUseTestImage={handleUseTestImage}
                 onEngineChange={handleEngineChange}
                 engine={engine}
                 processing={processing}
