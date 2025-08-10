@@ -1,41 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DocScan-JSONify</title>
-    <link rel="stylesheet" href="style.css" />
+    <title>Vite + React</title>
   </head>
   <body>
-    <h1>DocScan-JSONify</h1>
-    <p>
-      A free, browser-based tool to scan documents with your camera, extract
-      text via OCR, and convert it to meaningful JSON using open-source
-      JavaScript libraries.
-    </p>
-
-    <div id="scanner-container">
-      <video id="video" playsinline autoplay></video>
-      <canvas id="canvas"></canvas>
-    </div>
-
-    <div class="controls">
-      <button id="start-scan">Start Camera</button>
-      <button id="capture" disabled>Capture</button>
-      <input type="file" id="file-input" accept="image/*" style="display: none;" />
-    </div>
-
-    <div id="results">
-      <h2>Scan Results (JSON)</h2>
-      <p id="ocr-result">Status: Idle</p>
-      <textarea id="json-output" rows="15" cols="50"></textarea>
-      <button id="copy-json">Copy JSON</button>
-      <button id="download-json">Download JSON</button>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-    <script src="https://docs.opencv.org/4.7.0/opencv.js" async></script>
-    <script src="https://cdn.jsdelivr.net/gh/ColonelParrot/jscanify@master/src/jscanify.js"></script>
-    <script src="script.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
