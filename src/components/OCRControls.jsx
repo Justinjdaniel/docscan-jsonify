@@ -10,10 +10,17 @@ import {
   Stack,
   VStack,
 } from '@chakra-ui/react';
-import { FiCamera, FiUpload } from 'react-icons/fi';
+import { FiCamera, FiFileText, FiUpload } from 'react-icons/fi';
 import React from 'react';
 
-const OCRControls = ({ onFileSelect, onCameraSelect, onEngineChange, engine, processing }) => {
+const OCRControls = ({
+  onFileSelect,
+  onCameraSelect,
+  onEngineChange,
+  engine,
+  processing,
+  onUseTestImage,
+}) => {
   const fileInputRef = React.useRef();
 
   const handleFileButtonClick = () => {
@@ -58,6 +65,15 @@ const OCRControls = ({ onFileSelect, onCameraSelect, onEngineChange, engine, pro
           loadingText="Processing..."
         >
           Use Camera
+        </Button>
+        <Button
+          leftIcon={<FiFileText />}
+          colorScheme="purple"
+          onClick={onUseTestImage}
+          isLoading={processing}
+          loadingText="Processing..."
+        >
+          Use Test Image
         </Button>
       </HStack>
     </VStack>
