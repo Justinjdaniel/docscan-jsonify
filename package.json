@@ -1,5 +1,5 @@
 {
-  "name": "app",
+  "name": "docscan-jsonify",
   "version": "1.0.0",
   "description": "[![GitHub license](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE) [![GitHub Pages](https://github.com/justinjdaniel/docscan-jsonify/actions/workflows/static.yml/badge.svg)](https://justinjdaniel.github.io/docscan-jsonify/)",
   "main": "script.js",
@@ -21,5 +21,8 @@
   "homepage": "https://github.com/Justinjdaniel/docscan-jsonify#readme",
   "devDependencies": {
     "cypress": "^14.5.3"
+  },
+  "dependencies": {
+    "scribe.js-ocr": "^0.8.0"
   }
 }

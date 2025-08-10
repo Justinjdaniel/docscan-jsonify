@@ -11,6 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const jsonOutputEl = document.getElementById("json-output");
   const copyJsonButton = document.getElementById("copy-json");
   const downloadJsonButton = document.getElementById("download-json");
+  const ocrEngineSelect = document.getElementById("ocr-engine-select");
 
   let stream;
   let scanner;
@@ -88,20 +89,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function performOcr(imageCanvas) {
-    ocrResultEl.textContent = "Performing OCR...";
-    const {
-      data: { text },
-    } = await Tesseract.recognize(imageCanvas, "eng", {
-      logger: (m) => {
-        if (m.status === "recognizing text") {
-          ocrResultEl.textContent = `Recognizing text... ${Math.round(
-            m.progress * 100
-          )}%`;
-        }
-      },
-    });
-    ocrResultEl.textContent = "OCR Complete. Raw text is in the JSON below.";
-    parseTextAndGenerateJson(text);
+    const selectedEngine = ocrEngineSelect.value;
+    let ocrModule;
+
+    if (selectedEngine === 'tesseract') {
+      ocrModule = await import('./ocr/tesseract/tesseract-ocr.js');
+    } else if (selectedEngine === 'scribe') {
+      ocrModule = await import('./ocr/scribe/scribe-ocr.js');
+    }
+
+    if (ocrModule) {
+      const text = await ocrModule.performOcr(imageCanvas, ocrResultEl);
+      parseTextAndGenerateJson(text);
+    } else {
+      console.error('Unknown OCR engine selected');
+    }
   }
 
   function parseTextAndGenerateJson(text) {
