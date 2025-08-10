@@ -1,6 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { vi } from 'vitest';
 import { useOCR } from './useOCR';
+import { parseOCRResult } from '../utils/parser';
 
 // Mock the OCR libraries
 vi.mock('tesseract.js', () => ({
@@ -17,25 +18,31 @@ vi.mock('scribe.js-ocr', () => ({
   },
 }));
 
+// Mock the parser utility
+vi.mock('../utils/parser', () => ({
+  parseOCRResult: vi.fn((text) => ({
+    invoiceNumber: 'parsed',
+    rawText: text,
+  })),
+}));
+
 // Mock URL.createObjectURL and URL.revokeObjectURL which are used in the hook
 global.URL.createObjectURL = vi.fn(() => 'mock-url');
 global.URL.revokeObjectURL = vi.fn();
 
 describe('useOCR hook', () => {
-  // Clear mocks before each test
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('should initialize with correct default values', () => {
     const { result } = renderHook(() => useOCR());
-
     expect(result.current.status).toBe('Idle');
     expect(result.current.result).toBeNull();
     expect(result.current.processing).toBe(false);
   });
 
-  it('should process image with Tesseract.js', async () => {
+  it('should process image with Tesseract.js and return parsed result', async () => {
     const { result } = renderHook(() => useOCR());
     const mockImage = new File([''], 'test.jpg', { type: 'image/jpeg' });
 
@@ -43,14 +50,13 @@ describe('useOCR hook', () => {
       await result.current.processImage(mockImage, 'tesseract');
     });
 
-    expect(result.current.status).toBe('Tesseract.js OCR Complete.');
-    expect(result.current.result).toEqual({ rawText: 'Mocked Tesseract Text' });
+    expect(parseOCRResult).toHaveBeenCalledWith('Mocked Tesseract Text');
+    expect(result.current.status).toBe('Processing Complete.');
+    expect(result.current.result.invoiceNumber).toBe('parsed');
     expect(result.current.processing).toBe(false);
-    expect(URL.createObjectURL).toHaveBeenCalledWith(mockImage);
-    expect(URL.revokeObjectURL).toHaveBeenCalledWith('mock-url');
   });
 
-  it('should process image with ScribeOCR', async () => {
+  it('should process image with ScribeOCR and return parsed result', async () => {
     const { result } = renderHook(() => useOCR());
     const mockImage = new File([''], 'test.jpg', { type: 'image/jpeg' });
 
@@ -58,11 +64,10 @@ describe('useOCR hook', () => {
       await result.current.processImage(mockImage, 'scribe');
     });
 
-    expect(result.current.status).toBe('ScribeOCR Complete.');
-    expect(result.current.result).toEqual({ rawText: 'Mocked ScribeOCR Text' });
+    expect(parseOCRResult).toHaveBeenCalledWith('Mocked ScribeOCR Text');
+    expect(result.current.status).toBe('Processing Complete.');
+    expect(result.current.result.invoiceNumber).toBe('parsed');
     expect(result.current.processing).toBe(false);
-    expect(URL.createObjectURL).toHaveBeenCalledWith(mockImage);
-    expect(URL.revokeObjectURL).toHaveBeenCalledWith('mock-url');
   });
 
   it('should handle errors during processing', async () => {

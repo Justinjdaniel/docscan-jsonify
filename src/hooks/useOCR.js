@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Tesseract from 'tesseract.js';
 import Scribe from 'scribe.js-ocr';
+import { parseOCRResult } from '../utils/parser';
 
 export const useOCR = () => {
   const [status, setStatus] = useState('Idle');
@@ -14,6 +15,7 @@ export const useOCR = () => {
 
     try {
       const imageUrl = URL.createObjectURL(image);
+      let rawText = '';
 
       if (engine === 'tesseract') {
         setStatus('Recognizing text with Tesseract.js...');
@@ -26,14 +28,17 @@ export const useOCR = () => {
             }
           },
         });
-        setResult({ rawText: text });
-        setStatus('Tesseract.js OCR Complete.');
+        rawText = text;
+        setStatus('Tesseract.js OCR Complete. Parsing...');
       } else if (engine === 'scribe') {
         setStatus('Recognizing text with ScribeOCR...');
-        const scribeResult = await Scribe.extractText([imageUrl]);
-        setResult({ rawText: scribeResult });
-        setStatus('ScribeOCR Complete.');
+        rawText = await Scribe.extractText([imageUrl]);
+        setStatus('ScribeOCR Complete. Parsing...');
       }
+
+      const parsedData = parseOCRResult(rawText);
+      setResult(parsedData);
+      setStatus('Processing Complete.');
 
       URL.revokeObjectURL(imageUrl);
     } catch (error) {
